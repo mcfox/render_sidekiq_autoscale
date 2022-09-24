@@ -1,0 +1,8 @@
+services:
+  - type: cron
+    name: mcfox-autoscale
+    env: ruby
+    plan: Starter
+    schedule: "*/30 * * * *"
+    buildCommand: "bundle install"
+    startCommand: "bundle exec ruby run.rb"
