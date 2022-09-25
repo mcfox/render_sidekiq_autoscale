@@ -9,6 +9,6 @@ begin
   puts "Adjusting #{app.worker_service_name}..."
   app.adjust_workers
   puts "Done."
-rescue => e
-  puts e.message
+# rescue => e
+#   puts e.message
 end

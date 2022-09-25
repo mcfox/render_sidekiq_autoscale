@@ -1,8 +1,18 @@
 services:
   - type: cron
-    name: mcfox-autoscale
+    name: app-autoscale
     env: ruby
     plan: Starter
     schedule: "*/30 * * * *"
     buildCommand: "gem install bundler; bundle install"
     startCommand: "bundle exec ruby run.rb"
+    envVars:
+      - key: AUTOSCALE_SERVICE_NAME
+        value: "worker"
+      - key: SIDEKIQ_RENDER_AUTOSCALE_API_TOKEN
+        value: "rnd_M57RvdKsIGwYoGBf8FpmnzVA0ku2"
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: fact-redis
+          property: connectionString
