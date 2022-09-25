@@ -4,5 +4,5 @@ services:
     env: ruby
     plan: Starter
     schedule: "*/30 * * * *"
-    buildCommand: "bundle install"
+    buildCommand: "gem install bundler:2.3.20; bundle install"
     startCommand: "bundle exec ruby run.rb"
