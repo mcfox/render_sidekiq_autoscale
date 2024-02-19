@@ -2,6 +2,7 @@ services:
   - type: cron
     name: rec2_prod_autoscale_v2
     env: ruby
+    region: ohio
     plan: Starter
     schedule: "*/30 * * * *"
     buildCommand: "gem install bundler; bundle install"
