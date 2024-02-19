@@ -72,9 +72,10 @@ class RenderAutoScale
 
   def desired_workers(total_jobs)
     jobs_per_worker = 20
-    max_workers = 2
+    max_workers = 3
+    min_workers = 0
     count = total_jobs / jobs_per_worker
-    count = 1 if count < 1
+    count = min_workers if count < min_workers
     count = max_workers if count > max_workers
     count
   end
