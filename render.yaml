@@ -1,6 +1,6 @@
 services:
   - type: cron
-    name: app-autoscale
+    name: rec2-autoscale
     env: ruby
     plan: Starter
     schedule: "*/30 * * * *"
@@ -8,11 +8,11 @@ services:
     startCommand: "bundle exec ruby run.rb"
     envVars:
       - key: AUTOSCALE_SERVICE_NAME
-        value: "worker"
+        value: "rec2-worker"
       - key: SIDEKIQ_RENDER_AUTOSCALE_API_TOKEN
         value: "rnd_M57RvdKsIGwYoGBf8FpmnzVA0ku2"
       - key: REDIS_URL
         fromService:
           type: redis
-          name: fact-redis
+          name: rec2-redis
           property: connectionString
