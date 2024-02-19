@@ -97,7 +97,7 @@ class RenderAutoScale
     else
       scale_workers(desired_workers(total_jobs))
     end
-    puts 'Finished adjusting workers'
+    puts "Finished adjusting workers to #{desired_workers(total_jobs)}"
   end
 
   def resume_workers
