@@ -6,7 +6,7 @@ class RenderAutoScale
 
   def initialize(service_name=nil, redis_url=nil, render_api_token=nil)
     @service_name = service_name || ENV['AUTOSCALE_SERVICE_NAME']
-    @redis_url = redis_url ENV['REDIS_URL']
+    @redis_url = redis_url || ENV['REDIS_URL']
     @render_api_token = render_api_token || ENV['SIDEKIQ_RENDER_AUTOSCALE_API_TOKEN']
     crate_render_client
     Sidekiq.configure_server do |config|
