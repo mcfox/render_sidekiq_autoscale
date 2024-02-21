@@ -30,12 +30,14 @@ class RenderAutoScale
   end
 
   def count_queued_jobs
-    count = 0
-    queues = Sidekiq::Queue.all
-    queues.each do |queue|
-      count += queue.size
-    end
-    count
+    total_enqueued = Sidekiq::Stats.new.enqueued
+    total_enqueued
+    # count = 0
+    # queues = Sidekiq::Queue.all
+    # queues.each do |queue|
+    #   count += queue.size
+    # end
+    # count
   end
 
   def count_running_jobs
@@ -104,6 +106,8 @@ class RenderAutoScale
   def resume_workers
     return if workers_running?
     total_jobs = count_jobs
+    # se pediu para ligar, liga no minimo um
+    total_jobs = 1 if total_jobs.zero?
     scale_workers(desired_workers(total_jobs))
   end
 
