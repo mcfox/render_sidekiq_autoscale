@@ -4,9 +4,9 @@ require 'render_api'
 
 class RenderAutoScale
 
-  def initialize(service_name, redis_url, render_api_token=nil)
-    @service_name = service_name
-    @redis_url = redis_url
+  def initialize(service_name=nil, redis_url=nil, render_api_token=nil)
+    @service_name = service_name || ENV['AUTOSCALE_SERVICE_NAME']
+    @redis_url = redis_url ENV['REDIS_URL']
     @render_api_token = render_api_token || ENV['SIDEKIQ_RENDER_AUTOSCALE_API_TOKEN']
     crate_render_client
     Sidekiq.configure_server do |config|
@@ -31,13 +31,16 @@ class RenderAutoScale
 
   def count_queued_jobs
     total_enqueued = Sidekiq::Stats.new.enqueued
-    total_enqueued
-    # count = 0
-    # queues = Sidekiq::Queue.all
-    # queues.each do |queue|
-    #   count += queue.size
-    # end
-    # count
+    count = 0
+    queues = Sidekiq::Queue.all
+    queues.each do |queue|
+      count += queue.size
+    end
+    puts "redis_url: #{@redis_url}"
+    puts "count_queued_jobs: #{count}"
+    puts "total_enqueued: #{total_enqueued}"
+    # vou usar os dois metodos e pegar o maior valor
+    [count, total_enqueued].max
   end
 
   def count_running_jobs
