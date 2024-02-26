@@ -1,4 +1,5 @@
 require './app/render_auto_scale'
+require './app/sidekiq_counter'
 
 begin
   puts "Starting auto scale service..."
