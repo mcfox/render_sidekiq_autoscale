@@ -52,7 +52,7 @@ class RenderAutoScale
     jobs_per_worker = 20
     max_workers = 3
     min_workers = 0
-    count = total_jobs / jobs_per_worker
+    count = (total_jobs.to_f / jobs_per_worker).ceil
     count = min_workers if count < min_workers
     count = max_workers if count > max_workers
     count
