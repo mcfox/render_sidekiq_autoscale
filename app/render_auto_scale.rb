@@ -6,17 +6,11 @@ class RenderAutoScale
 
   def initialize(service_name=nil, redis_url=nil, render_api_token=nil)
     @service_name = service_name || ENV['AUTOSCALE_SERVICE_NAME']
-    @redis_url = redis_url || ENV['REDIS_URL']
     @render_api_token = render_api_token || ENV['SIDEKIQ_RENDER_AUTOSCALE_API_TOKEN']
+    @counter = SidekiqCounter.new
     crate_render_client
     puts "redis_url: #{@redis_url}"
     puts "service_name: #{@service_name}"
-    Sidekiq.configure_server do |config|
-      config.redis = {:url => "#{@redis_url}/0" }
-    end
-    Sidekiq.configure_client do |config|
-        config.redis = {:url => "#{@redis_url}/0" }
-    end
   end
 
   def crate_render_client
@@ -31,37 +25,8 @@ class RenderAutoScale
     end
   end
 
-  def count_queued_jobs
-    total_enqueued = Sidekiq::Stats.new.enqueued
-    count = 0
-    queues = Sidekiq::Queue.all
-    if queues.size.zero?
-      raise 'No queues found'
-    end
-    queues.each do |queue|
-      count += queue.size
-    end
-    puts "count_queued_jobs: #{count}"
-    puts "total_enqueued: #{total_enqueued}"
-    # vou usar os dois metodos e pegar o maior valor
-    [count, total_enqueued].max
-  end
-
-  def count_running_jobs
-    count = 0
-    workers = Sidekiq::Workers.new
-    if workers.size.zero?
-      raise 'No workers running'
-    end
-    workers.each do |_process_id, _thread_id, work|
-      count += 1
-    end
-    puts "count_working_jobs: #{count}"
-    count
-  end
-
   def count_jobs
-    count_running_jobs + count_queued_jobs
+    @counter.total_jobs
   end
 
   def service_id
