@@ -1,6 +1,7 @@
 require 'sidekiq'
 require 'sidekiq/web'
 require 'render_api'
+require './app/sidekiq_counter'
 
 class RenderAutoScale
 
