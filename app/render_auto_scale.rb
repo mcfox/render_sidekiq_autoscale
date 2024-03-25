@@ -50,7 +50,7 @@ class RenderAutoScale
 
   def desired_workers(total_jobs)
     jobs_per_worker = 20
-    max_workers = 3
+    max_workers = ENV['SIDEKIQ_MAX_WORKERS'] || 2
     min_workers = 0
     count = (total_jobs.to_f / jobs_per_worker).ceil
     count = min_workers if count < min_workers

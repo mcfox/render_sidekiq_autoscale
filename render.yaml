@@ -12,6 +12,8 @@ services:
         value: "rec2_prod_worker"
       - key: SIDEKIQ_RENDER_AUTOSCALE_API_TOKEN
         value: "rnd_M57RvdKsIGwYoGBf8FpmnzVA0ku2"
+      - key: SIDEKIQ_MAX_WORKERS
+        value: "2"
       - key: REDIS_URL
         fromService:
           type: redis
