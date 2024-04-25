@@ -26,7 +26,7 @@ class RenderAutoScale
   end
 
   def count_jobs
-    @counter.total_jobs
+    @counter.enqueued_jobs_count + @counte.running_jobs_count
   end
 
   def service_id
@@ -50,7 +50,7 @@ class RenderAutoScale
 
   def desired_workers(total_jobs)
     jobs_per_worker = 20
-    max_workers = ENV['SIDEKIQ_MAX_WORKERS']&.to_i || 2
+    max_workers = ENV['SIDEKIQ_MAX_WORKERS']&.to_i || 1
     min_workers = 0
     count = (total_jobs.to_f / jobs_per_worker).ceil
     count = min_workers if count < min_workers

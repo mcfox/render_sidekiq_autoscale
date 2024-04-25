@@ -23,7 +23,24 @@ class SidekiqCounter
 
   end
 
-  def total_jobs
+  def running_jobs
+    workers = Sidekiq::Workers.new
+    workers.map do |process_id, thread_id, work|
+      {
+        "process_id" => process_id,
+        "thread_id" => thread_id,
+        "queue" => work["queue"],
+        "run_at" => Time.at(work["run_at"]),
+        "payload" => work["payload"]
+      }
+    end
+  end
+
+  def running_jobs_count
+    Sidekiq::Workers.new.size
+  end
+
+  def enqueued_jobs_count
     stats = Sidekiq::Stats.new
     stats.queues.values.sum
   end
