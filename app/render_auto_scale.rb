@@ -25,8 +25,8 @@ class RenderAutoScale
     end
   end
 
-  def count_jobs
-    @counter.enqueued_jobs_count + @counter.running_jobs_count
+  def jobs_count
+    @counter.jobs_count
   end
 
   def service_id
@@ -69,7 +69,7 @@ class RenderAutoScale
   end
 
   def adjust_workers
-    total_jobs = count_jobs
+    total_jobs = jobs_count
     puts "#{total_jobs} jobs in queues."
     if total_jobs.zero?
       suspend_workers
@@ -81,7 +81,7 @@ class RenderAutoScale
 
   def resume_workers
     return if workers_running?
-    total_jobs = count_jobs
+    total_jobs = jobs_count
     # se pediu para ligar, liga no minimo um
     total_jobs = 1 if total_jobs.zero?
     scale_workers(desired_workers(total_jobs))

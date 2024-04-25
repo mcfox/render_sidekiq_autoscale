@@ -45,4 +45,8 @@ class SidekiqCounter
     stats.queues.values.sum
   end
 
+  def jobs_count
+    running_jobs_count + enqueued_jobs_count
+  end
+
 end
