@@ -26,7 +26,7 @@ class RenderAutoScale
   end
 
   def count_jobs
-    @counter.enqueued_jobs_count + @counte.running_jobs_count
+    @counter.enqueued_jobs_count + @counter.running_jobs_count
   end
 
   def service_id
