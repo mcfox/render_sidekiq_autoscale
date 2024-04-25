@@ -1,11 +1,11 @@
 class SidekiqCounter
-  def initialize
+  def initialize(redis_url, queue_name=nil)
     require 'sidekiq'
     require 'sidekiq-status'
-
+    @queue_name = queue_name
     redis_conn = proc {
       Redis.new(
-        url: ENV["REDIS_URL"] || "redis://localhost:6379",
+        url: redis_url,
         driver: :hiredis,
         ssl_params: {verify_mode: OpenSSL::SSL::VERIFY_NONE}
       )
@@ -23,9 +23,30 @@ class SidekiqCounter
 
   end
 
-  def total_jobs
+  def running_jobs
+    workers = Sidekiq::Workers.new
+    workers.map do |process_id, thread_id, work|
+      {
+        "process_id" => process_id,
+        "thread_id" => thread_id,
+        "queue" => work["queue"],
+        "run_at" => Time.at(work["run_at"]),
+        "payload" => work["payload"]
+      }
+    end
+  end
+
+  def running_jobs_count
+    Sidekiq::Workers.new.size
+  end
+
+  def enqueued_jobs
     stats = Sidekiq::Stats.new
-    stats.queues.values.sum
+    if @queue_name
+      stats.queues[@queue_name] || 0
+    else
+      stats.queues.values.sum
+    end
   end
 
 end
