@@ -1,6 +1,6 @@
 services:
   - type: cron
-    name: rec2_prod_autoscale_v2
+    name: recovery2_prod_autoscale_v2
     env: ruby
     region: ohio
     plan: Starter
@@ -9,7 +9,7 @@ services:
     startCommand: "bundle exec ruby run.rb"
     envVars:
       - key: AUTOSCALE_SERVICE_NAME
-        value: "rec2_prod_worker"
+        value: "recovery2_prod_worker"
       - key: SIDEKIQ_RENDER_AUTOSCALE_API_TOKEN
         value: "rnd_M57RvdKsIGwYoGBf8FpmnzVA0ku2"
       - key: SIDEKIQ_MAX_WORKERS
@@ -17,5 +17,5 @@ services:
       - key: REDIS_URL
         fromService:
           type: redis
-          name: rec2_prod_redis
+          name: recovery2_prod_redis
           property: connectionString
